@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <title>NCR</title>
+</head>
+<body>
+    <header>
+        <logo>
+            <h1>SHOPIFY</h1><img src="../Go/Media/Vector.svg" alt="">
+        </logo>
+        <nav>
+            <ul>
+                <li><h4><a href="#">Home</a></li></h4>
+                <li><h4><a href="#">Product</a></li></h4>
+                <li><h4><a href="#">Contact</a></li></h4>
+                <li><h4><a href="#">About</a></li></h4>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        
+        <div id="app">
+            {{cast}}
+            <product-display></product-display>
+            <product-display></product-display>
+        </div>
+    </main>
+    <script src="index.js"></script>
+    <script src="./components/products.js"></script>
+    <script>
+        app.mount('#app')
+    </script>
+</body>
+</html>
