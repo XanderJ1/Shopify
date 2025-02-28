@@ -3,6 +3,8 @@ import Homeview from "@/views/Homeview.vue";
 import SignUp from "@/components/signUp.vue";
 import Login from "@/components/Login.vue";
 import AddProduct from "@/components/AddProduct.vue";
+import Product from "@/components/Product.vue";
+import Payment from "@/components/Payment.vue";
 
 const router = createRouter({
     history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -14,7 +16,7 @@ const router = createRouter({
         },
         {
             path: "/signup",
-            name: "signup",
+            name: "signup", 
             component: SignUp,
         },
         {
@@ -25,7 +27,17 @@ const router = createRouter({
         {
             path: "/addProduct",
             name: "addProduct",
-            component: AddProduct,r
+            component: AddProduct,
+        },
+        {
+            path: "/product",
+            name: "product",
+            component: () => import("@/views/ProductView.vue")
+        },
+        {
+            path: "/payment",
+            name: "payment",
+            component: () => import("@/views/PaymentView.vue")
         }
     ]
 });

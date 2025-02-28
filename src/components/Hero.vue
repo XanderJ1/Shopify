@@ -4,7 +4,7 @@
 
 <template>
         <div class="container relative mx-auto px-6 my-8">
-        <div class="bg-amber-50 rounded-xl flex items-center justify-between overflow-hidden ">
+        <div class="bg-amber-50 rounded-xl flex items-center justify-between overflow-hidden :sm-flex-col">
             <div class="p-12 max-w-lg">
                 <h1 class="text-4xl font-semibold text-green-900 mb-6">
                 Grab upto 15% Off On<br>
@@ -25,5 +25,7 @@
     </div>
 </template>
 
-<style>
+<style scoped>
+
+
 </style>

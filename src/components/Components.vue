@@ -20,249 +20,27 @@ function getIt(){
     })
     .catch((error) => {
         console.log(error);
-    });
+    });    
+}
 
-    onMounted(() => {
+onMounted(() => {
     getIt();
 });
-    
-}
 </script>
 
 <template>
 
-    <h1 class="text-center text-3xl" @click="getIt()"> Hello </h1>
-    <RouterLink to="/addProduct"> AddProduct</RouterLink>
+    <h1 class="text-center text-3xl" @click="getIt()"> Featured Products </h1>
+    <RouterLink to="/addProduct" class="text-center justify-center text-3xl"> AddProduct</RouterLink>
     <div class="grid-container">
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/headphone2.png" alt="">
-        </div>
-        <h1>Wireless Earbuds, IPX8</h1>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/images-removebg-preview.png" alt="">
-        </div>
-        <h1>Wireless Earbuds, IPX8</h1>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/images-removebg-preview.png" alt="">
-        </div>
-        <h1>Wireless Earbuds, IPX8</h1>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/images-removebg-preview.png" alt="">
-        </div>
-        <div class="namePrice">
-            <h1>Wireless Earbuds, IPX8</h1>
-        </div>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/images-removebg-preview.png" alt="">
-        </div>
-        <h1>Wireless Earbuds, IPX8</h1>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/images-removebg-preview.png" alt="">
-        </div>
-        <h1>Wireless Earbuds, IPX8</h1>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/airmax.png" alt="">
-        </div>
-        <h1>Wireless Earbuds, IPX8</h1>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/airpod.png" alt="">
-        </div>
-        <div class="namePrice">
-            <h1>Wireless Earbuds, IPX8</h1>
-        </div>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/airpods-max-headphones-silver.png" alt="">
-        </div>
-        <h1>Wireless Earbuds, IPX8</h1>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/airpods-max-headphones-silver.png" alt="">
-        </div>
-        <h1>Wireless Earbuds, IPX8</h1>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/headphone1.png" alt="">
-        </div>
-        <h1>Wireless Earbuds, IPX8</h1>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/headphone1.png" alt="">
-        </div>
-        <h1>Wireless Earbuds, IPX8</h1>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/headphone1.png" alt="">
-        </div>
-        <h1>Wireless Earbuds, IPX8</h1>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/AirPods Max Headphones Silver.G03.watermarked.2k.png" alt="">
-        </div>
-        <div class="namePrice">
-            <h1>Wireless Earbuds, IPX8</h1>
-            <h3>$39.4</h3>
-        </div>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/sweater-removebg-preview.png" alt="">
-        </div>
-        <h1>Wireless Earbuds, IPX8</h1>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/shopping-removebg-preview.png" alt="">
-        </div>
-        <h1>Wireless Earbuds, IPX8</h1>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/download.jpg" alt="">
-        </div>
-        <h1>Wireless Earbuds, IPX8</h1>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-
-    <div class="firstProduct">
-        <div class="img-cont">
-            <img src="../assets/images/download.jpg" alt="">
-        </div>
-        <h1>Wireless Earbuds, IPX8</h1>
-        <p>Original Classic, IPX8 certified</p>
-        <div class="stars">★★★★★</div>
-        <div class="cartPrice">
-            <div class="cart">Add to cart</div>
-            <div class="price"> $700 </div>
-        </div>
-    </div>
-
     <!--   Database Content  -->
     <div class="firstProduct" v-for="product in products" :key="product.id">
+        <RouterLink :to="{
+        path: '/product',
+        query: {id: product.id}
+        }">
         <div class="img-cont">
-            <img :src="`data:${product.imageType};base64,${product.imageData}`" alt="">
+        <img :src="`data:${product.imageType};base64,${product.imageData}`" alt="">
         </div>
         <h1>{{product.name}}</h1>
         <p>{{product.description}}</p>
@@ -271,6 +49,7 @@ function getIt(){
             <div class="cart">Add to cart</div>
             <div class="price"> ${{product.price}} </div>
         </div>
+        </RouterLink>
     </div>     
     
 

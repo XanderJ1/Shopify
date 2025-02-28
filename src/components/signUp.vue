@@ -1,5 +1,5 @@
 <script setup>
-import { useRouter } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
@@ -67,6 +67,7 @@ function handleSubmit(){
                 <p1>Agree to Terms and conditions</p1>
             </div>
             <button type="submit">Sign Up</button>
+            <p>     Already have an acount?  <RouterLink to="/login">Log in</RouterLink></p>
         </form>
     </main>
 
