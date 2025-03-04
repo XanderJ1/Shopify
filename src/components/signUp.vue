@@ -11,7 +11,6 @@ function handleSubmit(){
     const username = document.getElementById('username').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    const userRole = document.getElementById('userRole').value;
     
     const array = [username, email, password];
     console.log(array);
@@ -20,7 +19,6 @@ function handleSubmit(){
         username: username,
         email: email,
         password: password,
-        role: userRole
     })
     .then((response) => {
         console.log(response.data);
@@ -56,18 +54,8 @@ function handleSubmit(){
         <label for="password">Password</label>
         <input type="password" id="password" name="password" required>
 
-        <select id="userRole" name="userRole">
-            <option disabled selected> Select Role</option>
-            <option value="ADMIN">ADMIN</option>
-            <option value="USER">USER</option>
-        </select>
-
-            <div class="gree">
-                <input type="checkbox" id="checkbox">
-                <p1>Agree to Terms and conditions</p1>
-            </div>
             <button type="submit">Sign Up</button>
-            <p>     Already have an acount?  <RouterLink to="/login">Log in</RouterLink></p>
+            <p class="Login">Already have an acount?  <RouterLink to="/login"><span>Log in</span></RouterLink></p>
         </form>
     </main>
 
@@ -92,6 +80,9 @@ logo{
     height: 50px;
     width: 15px;
 }
+.Login{
+    font-size: 20px;
+}
 .container{
     display: flex;
     justify-content: space-around;
@@ -107,8 +98,6 @@ main{
     justify-content: center;
     height: 100vh;
     background: #f1f1f1;
-}
-aside{
 }
 aside img{
     width: 40rem;
@@ -173,27 +162,10 @@ main form input{
     border-radius: 20px;
 }
 
-main form select{
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-}
-
-form .gree{
-    display: flex;
-    margin-bottom: 10px;
-}
-
-form .gree input{
-    width: 12px;
-    margin-right: 5px;
-}
-
 main form button{
     border: 1px solid black;
-    height: 30px;
+    height: 3rem;
+    margin: 10px 0px 10px;
     color: white;
     background-color: rgb(26, 25, 25);
     border-radius: 20px;

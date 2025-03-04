@@ -15,12 +15,12 @@ import { RouterLink } from 'vue-router';
             <a href="#">Deals </a>
             <a href="#">What's New </a>
             <a href="#">Contact</a>
-            <RouterLink to="/signup">SignUp  </RouterLink>
+            <RouterLink to="/addProduct">Add Product  </RouterLink>
         </div>
         <div class="flex items-center text-xl space-x-6">
             <div class="flex items-center space-x-2">
             <img src="../assets/images/user.svg" class="w-5 h-5" alt="">
-            <span>Account</span>
+            <span><RouterLink to="/signup">SignUp  </RouterLink></span>
             </div>
             <div class="flex items-center text-xl space-x-2">
             <img src="../assets/images/shopping-cart.svg" class="w-5 h-5" alt="">

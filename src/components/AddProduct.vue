@@ -25,7 +25,10 @@ function handleSubmit() {
             'Content-Type': 'multipart/form-data'
         }
     })
-    .then(response => console.log(response.data))
+    .then(response => {
+        alert(response.data)
+
+    })
     .catch(error => console.error(error));
 }
 </script>

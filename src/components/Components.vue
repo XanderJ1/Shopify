@@ -31,7 +31,6 @@ onMounted(() => {
 <template>
 
     <h1 class="text-center text-3xl" @click="getIt()"> Featured Products </h1>
-    <RouterLink to="/addProduct" class="text-center justify-center text-3xl"> AddProduct</RouterLink>
     <div class="grid-container">
     <!--   Database Content  -->
     <div class="firstProduct" v-for="product in products" :key="product.id">

@@ -34,7 +34,7 @@ function handleSubmit(){
     
             <label for="password">Password</label>
             <input type="password" id="password" name="password" autocomplete="current-password" required>
-            <button type="submit">Sign Up</button>
+            <button type="submit">Log In</button>
             </form>
     
         </main>
