@@ -6,7 +6,7 @@ import { RouterLink } from 'vue-router';
 // Make products reactive
 const products = ref([]);
 
-function getIt(){
+function fetch(){
     console.log('Hello');
 
     const token =  localStorage.getItem('token');
@@ -23,9 +23,7 @@ function getIt(){
     });    
 }
 
-onMounted(() => {
-    getIt();
-});
+onMounted(() => fetch());
 </script>
 
 <template>

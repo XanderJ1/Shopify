@@ -9,8 +9,12 @@ function handleSubmit(){
     
     axios.post('http://localhost:8080/auth/signIn', user)
     .then((response) => {
-        console.log(response.data);
-        localStorage.setItem('token', response.data);
+        console.log(response.data)
+        const array = response.data
+        console.log(array[0] + "Token")
+        console.log(array[1] + "UserID")
+        localStorage.setItem('token', array[0]);
+        localStorage.setItem("userId", array[1])
     })
 }
 </script>

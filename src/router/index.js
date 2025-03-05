@@ -5,6 +5,7 @@ import Login from "@/components/Login.vue";
 import AddProduct from "@/components/AddProduct.vue";
 import Product from "@/components/Product.vue";
 import Payment from "@/components/Payment.vue";
+import ProductView from "@/views/ProductView.vue";
 
 const router = createRouter({
     history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
             path: "/payment",
             name: "payment",
             component: () => import("@/views/PaymentView.vue")
+        },
+        {
+            path: "/myProducts",
+            name: "myProducts",
+            component: () => import("@/views/MyProductView.vue")
         }
     ]
 });

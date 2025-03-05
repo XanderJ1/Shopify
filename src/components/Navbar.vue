@@ -14,7 +14,7 @@ import { RouterLink } from 'vue-router';
             <a href="#">Categories</a>
             <a href="#">Deals </a>
             <a href="#">What's New </a>
-            <a href="#">Contact</a>
+            <RouterLink to="/myProducts"> My Product</RouterLink>
             <RouterLink to="/addProduct">Add Product  </RouterLink>
         </div>
         <div class="flex items-center text-xl space-x-6">
