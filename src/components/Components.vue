@@ -112,9 +112,9 @@ onMounted(() => fetch());
             border: 1px solid black;
             border-radius: 20px;
             margin-top: 10px;
-            padding: 10px 6px;
+            padding: 10px 3px;
             margin-bottom: 10px;
-            width: 100px;
+            width: 7rem;
             transition: 0.3s ease-out;
         }
         .firstProduct .price{

@@ -1,5 +1,6 @@
 <script setup>
 import axios from 'axios';
+import router from '@/router';
 
 function handleSubmit(){
     const user = {
@@ -15,6 +16,7 @@ function handleSubmit(){
         console.log(array[1] + "UserID")
         localStorage.setItem('token', array[0]);
         localStorage.setItem("userId", array[1])
+        router.push('/')
     })
 }
 </script>
@@ -146,27 +148,9 @@ main form input{
     border-radius: 20px;
 }
 
-main form select{
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-}
-
-form .gree{
-    display: flex;
-    margin-bottom: 10px;
-}
-
-form .gree input{
-    width: 12px;
-    margin-right: 5px;
-}
-
 main form button{
     border: 1px solid black;
-    height: 30px;
+    height: 40px;
     color: white;
     background-color: rgb(26, 25, 25);
     border-radius: 20px;

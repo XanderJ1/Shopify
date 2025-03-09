@@ -1,14 +1,20 @@
 <script setup>
+import { RouterView } from 'vue-router';
+
 import Navbar from '@/components/Navbar.vue'
-import { RouterView } from 'vue-router';  
+import Foot from './views/Foot.vue';
 </script>
 
 <template>
-  <header>
     <Navbar />
-    <RouterView />
-  </header>
+    <div class="maincontent">
+      <RouterView />
+    </div>
+    <Foot />
 </template>
 
 <style scoped>
+.maincontent{
+min-height: 100vh;
+}
 </style>
