@@ -1,46 +1,28 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
-import { RouterLink } from 'vue-router';
+console.log('Hello');
 
-// Make products reactive
 const products = ref([]);
 
-
-function addToCart(id){
-    axios.post(`http://localhost:8080/api/v1/products/addToCart/${id}`)
-    .then((response) => {
-        console.log(response.data)
-    })
-    .catch((error) => {
-        console.log(error)
-    })
-}
-
-
 function fetch(){
-    console.log('Hello');
-
-    const token =  localStorage.getItem('token');
-    axios.defaults. headers. common ['Authorization'] = `Bearer ${token}`;
-    axios.get('http://localhost:8080/api/v1/products')
-    .then((response) => {
-        products.value = response.data;
-        console.log(response.data);
-        console.log(products.length);
-        console.log(products);
-    })
-    .catch((error) => {
-        console.log(error);
-    });    
+    
+const token =  localStorage.getItem('token');
+axios.defaults. headers. common ['Authorization'] = `Bearer ${token}`;
+axios.get(`http://localhost:8080/api/v1/users/products`)
+.then((response) => {
+    console.log(response.data)
+    products.value = response.data
+})
 }
 
-onMounted(() => fetch());
+onMounted(() => fetch())
+
 </script>
 
 <template>
 
-    <h1 class="text-center text-3xl" @click="getIt()"> Featured Products </h1>
+    <h1 class="text-left text-3xl px-20 pt-10" @click="getIt()"> My Products </h1>
     <div class="grid-container">
     <!--   Database Content  -->
     <div class="firstProduct" v-for="product in products" :key="product.id">
@@ -54,30 +36,18 @@ onMounted(() => fetch());
         <h1>{{product.name}}</h1>
         <p>{{product.description}}</p>
         <div class="stars">★★★★★</div>
-        </RouterLink>
         <div class="cartPrice">
-            <div @click="addToCart(product.id)" class="cart">Add to cart </div>
+            <div class="cart">Add to cart</div>
             <div class="price"> ${{product.price}} </div>
         </div>
+        </RouterLink>
     </div>     
-    
-
-</div>
+    </div>    
 </template>
 
+
 <style scoped>
-        *{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body{
-            margin: 70px;
-            padding: 20px;
-        }
-        body .h1{
-            text-align: center;
-        }
+
         .grid-container{
             display: grid;
             padding: 20px;
@@ -124,9 +94,9 @@ onMounted(() => fetch());
             border: 1px solid black;
             border-radius: 20px;
             margin-top: 10px;
-            padding: 10px 3px;
+            padding: 10px 6px;
             margin-bottom: 10px;
-            width: 7rem;
+            width: 100px;
             transition: 0.3s ease-out;
         }
         .firstProduct .price{

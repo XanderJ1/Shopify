@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router';
 
 import Navbar from '@/components/Navbar.vue'
-import Foot from './views/Foot.vue';
+import Foot from '@/views/Foot.vue';
 </script>
 
 <template>

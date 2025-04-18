@@ -13,9 +13,11 @@ function handleSubmit(){
         console.log(response.data)
         const array = response.data
         console.log(array[0] + "Token")
-        console.log(array[1] + "UserID")
+        console.log(array[1] + "Role")
+        console.log(array[2] + "Initials")
         localStorage.setItem('token', array[0]);
-        localStorage.setItem("userId", array[1])
+        localStorage.setItem("role", array[1])
+        localStorage.setItem("initials", array[2])
         router.push('/')
     })
 }
