@@ -6,6 +6,18 @@ import { RouterLink } from 'vue-router';
 // Make products reactive
 const products = ref([]);
 
+
+function addToCart(id){
+    axios.post(`http://localhost:8080/api/v1/products/addToCart/${id}`)
+    .then((response) => {
+        console.log(response.data)
+    })
+    .catch((error) => {
+        console.log(error)
+    })
+}
+
+
 function fetch(){
     console.log('Hello');
 
@@ -42,11 +54,11 @@ onMounted(() => fetch());
         <h1>{{product.name}}</h1>
         <p>{{product.description}}</p>
         <div class="stars">★★★★★</div>
+        </RouterLink>
         <div class="cartPrice">
-            <div class="cart">Add to cart</div>
+            <div @click="addToCart(product.id)" class="cart">Add to cart </div>
             <div class="price"> ${{product.price}} </div>
         </div>
-        </RouterLink>
     </div>     
     
 

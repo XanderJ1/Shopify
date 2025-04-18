@@ -11,14 +11,16 @@ function handleSubmit(){
     const username = document.getElementById('username').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    const role = document.getElementById('role').value;
     
-    const array = [username, email, password];
+    const array = [username, email, password, role];
     console.log(array);
 
     axios.post('http://localhost:8080/auth/register', {
         username: username,
         email: email,
         password: password,
+        role: role
     })
     .then((response) => {
         console.log(response.data);
@@ -53,6 +55,12 @@ function handleSubmit(){
 
         <label for="password">Password</label>
         <input type="password" id="password" name="password" required>
+
+        <select name="role" id="role">
+            <option value="BUYER">BUYER</option>
+            <option value="SELLER">SELLER</option>
+
+        </select>
 
             <button type="submit">Sign Up</button>
             <p class="Login">Already have an acount?  <RouterLink to="/login"><span>Log in</span></RouterLink></p>
@@ -162,6 +170,13 @@ main form input{
     border-radius: 20px;
 }
 
+#role{
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+}
 main form button{
     border: 1px solid black;
     height: 3rem;
