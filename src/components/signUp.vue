@@ -1,6 +1,7 @@
 <script setup>
 import { RouterLink, useRouter } from 'vue-router';
 import axios from 'axios';
+import { HOST_URL } from '../config';
 
 const router = useRouter();
 
@@ -15,8 +16,8 @@ function handleSubmit(){
     
     const array = [username, email, password, role];
     console.log(array);
-
-    axios.post('http://localhost:8080/auth/register', {
+    console.log(`${HOST_URL}auth/register` + "  " +array[0])
+    axios.post(`${HOST_URL}auth/register`, {
         username: username,
         email: email,
         password: password,

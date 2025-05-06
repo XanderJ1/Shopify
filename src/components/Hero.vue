@@ -1,4 +1,5 @@
 <script setup>
+import { HOST_URL } from '../config';
 
 </script>
 
@@ -14,6 +15,8 @@
                     Buy Now
                 </button>
             </div>
+
+            
             <div class="flex-1 h-96 relative">
                 <img
                     src="../assets/images/headphone.png"
@@ -22,6 +25,30 @@
                 >
             </div>
         </div>
+
+        <div class="container flex-col mx-auto p-4 mb-10">    
+        
+        
+        <h1 class="text-3xl">Top-Selling Product of <br> the year Collection</h1>
+        <div class="top container grid grid-cols-4 gap-2 mx-auto mt-10">
+            <div class="clothing cursor-pointer">
+                <img class="w-80 h-80 mx-4 border border-gray-200 rounded-2xl" src="../assets/images/clothing.jpg">
+                <h2 class="text-2xl mt-2 text-center">Clothing</h2>
+            </div>
+            <div class="kids cursor-pointer">
+                <img class="w-80 h-80 mx-4 border border-gray-200 rounded-2xl" src="../assets/images/kids.jpg">
+                <h2 class="text-2xl mt-2 text-center">Kids</h2>
+            </div>
+            <div class="electronics cursor-pointer">
+                <img class="w-80 h-80 mx-4 border border-gray-200 rounded-2xl" src="../assets/images/laptop.jpg">
+                <h2 class="text-2xl mt-2 text-center">Electronics</h2>
+            </div>
+            <div class="accessories cursor-pointer">
+                <img class="w-80 h-80 mx-4 border border-gray-200 rounded-2xl" src="../assets/images/pexels-pixabay-277390.jpg">
+                <h2 class="text-2xl mt-2 text-center">Accessories</h2>
+            </div>
+        </div>
+       </div>
     </div>
 </template>
 

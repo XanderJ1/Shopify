@@ -1,11 +1,13 @@
 <script setup>
 import Hero from '@/components/Hero.vue';
-import Options from '@/components/Options.vue';
-import Components from '@/components/Components.vue';
+import Products from '@/components/Products.vue';
+import Soon from '@/components/Soon.vue';
 </script>
 
 <template>
+     <div class="max-w-7xl mx-auto px-4">
     <Hero />
-    <Options />
-    <Components />
+    <Products />
+    <Soon />
+     </div>
 </template>

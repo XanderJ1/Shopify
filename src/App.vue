@@ -10,6 +10,7 @@ import Foot from '@/views/Foot.vue';
     <div class="maincontent">
       <RouterView />
     </div>
+    
     <Foot />
 </template>
 

@@ -1,5 +1,7 @@
 <script setup>
 import axios from 'axios';
+import { HOST_URL } from '../config';
+
 function handleSubmit() {
     const token = localStorage.getItem('token')
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -20,7 +22,7 @@ function handleSubmit() {
     formData.append('productDTO', new Blob([JSON.stringify(productDTO)], {type: 'application/json'}));
     formData.append('file', fileInput.files[0]);
 
-    axios.post("http://localhost:8080/api/v1/products", formData, {
+    axios.post(`${HOST_URL}api/v1/products`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
