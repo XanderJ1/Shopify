@@ -1,4 +1,5 @@
 <script setup>
+import { HOST_URL } from '../config';
 
 </script>
 

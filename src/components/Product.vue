@@ -1,7 +1,11 @@
 <script setup>
 import {ref, defineProps, onMounted} from 'vue'
 import axios from 'axios'
+import { HOST_URL } from '../config';
+import { useCounter } from '@/stores/counter'
 
+
+const storeCounter = useCounter()
 const product = ref({})
 const props = defineProps({
    id:{
@@ -11,9 +15,9 @@ const props = defineProps({
 })
 
 function buyIt(productId) {
-    axios.post('http://localhost:8080/api/v1/products/buy')
+    axios.post(`${HOST_URL}api/v1/products/buy`)
     .then((response) => {
-        console.log(response.data)
+        alert(response.data)
     })
     .catch((error) => {
         console.log(error)
@@ -24,7 +28,7 @@ const id = props.id
 function get(){
     const token =  localStorage.getItem('token');
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    axios.get(`http://localhost:8080/api/v1/products/${id}`)
+    axios.get(`${HOST_URL}api/v1/products/${id}`)
     .then(response => {
         console.log(response.data)
         product.value=response.data
@@ -33,10 +37,11 @@ function get(){
 
 
 
-function addToCart(){
-    axios.post('http://localhost:8080/api/v1/products/addToCart/5')
+function addToCart(id){
+    axios.post(`${HOST_URL}api/v1/products/addToCart/${id}`)
     .then((response) => {
-        console.log(response.data)
+        alert(response.data)
+        storeCounter.increment()
     })
     .catch((error) => {
         console.log(error)
@@ -70,7 +75,7 @@ onMounted(() => {
             <div class="message">
             <h1>Airpods- Max</h1>
             <p>Original Classic, IPX8 certified 2024 edition</p>
-            <div class="stars">★★★★★</div>
+            <div class="stars"><i class="pi pi-star-fill text-orange-500"></i><i class="pi pi-star-fill text-orange-500"></i><i class="pi pi-star-fill text-orange-500"></i><i class="pi pi-star-fill text-orange-500"></i><i class="pi pi-star-fill text-orange-500"></i></div>
             <div class="discount">
                 <h3>Pay $350.00 or $20.00/month</h3>
                 <p>You can pay just 20 dollars per month for the product</p>
@@ -96,8 +101,8 @@ onMounted(() => {
             </div>
         </div>  
         <div class="buttons" :product>
-            <button class="buy" @click="buyIt(6)">>Buy Now</button>
-            <button @click="addToCart()" class="cart cursor-pointer"> Add to Cart</button>
+            <button class="buy" @click="buyIt(6)">Buy Now</button>
+            <button @click="addToCart(product.id)" class="cart cursor-pointer"> Add to Cart</button>
         </div>        
     </div>
     </div>

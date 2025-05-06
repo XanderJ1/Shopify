@@ -1,23 +1,21 @@
 <script setup>
 import axios from 'axios';
 import router from '@/router';
-
+import { HOST_URL } from '@/config.js';
 function handleSubmit(){
     const user = {
         username: document.getElementById('username').value,
         password: document.getElementById('password').value
     }
-    
-    axios.post('http://localhost:8080/auth/signIn', user)
+    console.log(`${HOST_URL}auth/signIn` + user.username)
+    axios.post(`${HOST_URL}auth/signIn`, user)
     .then((response) => {
         console.log(response.data)
         const array = response.data
-        console.log(array[0] + "Token")
-        console.log(array[1] + "Role")
-        console.log(array[2] + "Initials")
-        localStorage.setItem('token', array[0]);
-        localStorage.setItem("role", array[1])
-        localStorage.setItem("initials", array[2])
+        console.log(array.token + "Token")
+        console.log(array.user.role + "Role")
+        localStorage.setItem('token', array.token);
+        localStorage.setItem("role", array.user.role)
         router.push('/')
     })
 }

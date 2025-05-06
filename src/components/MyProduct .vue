@@ -1,5 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
+import { HOST_URL } from '../config';
+
 import axios from 'axios';
 console.log('Hello');
 
@@ -9,7 +11,7 @@ function fetch(){
     
 const token =  localStorage.getItem('token');
 axios.defaults. headers. common ['Authorization'] = `Bearer ${token}`;
-axios.get(`http://localhost:8080/api/v1/users/products`)
+axios.get(`${HOST_URL}api/v1/users/products`)
 .then((response) => {
     console.log(response.data)
     products.value = response.data
@@ -35,7 +37,7 @@ onMounted(() => fetch())
         </div>
         <h1>{{product.name}}</h1>
         <p>{{product.description}}</p>
-        <div class="stars">★★★★★</div>
+        <div class="stars"><i class="pi pi-star-fill text-orange-500"></i><i class="pi pi-star-fill text-orange-500"></i><i class="pi pi-star-fill text-orange-500"></i><i class="pi pi-star-fill text-orange-500"></i><i class="pi pi-star-fill text-orange-500"></i></div>
         <div class="cartPrice">
             <div class="cart">Add to cart</div>
             <div class="price"> ${{product.price}} </div>

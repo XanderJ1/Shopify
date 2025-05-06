@@ -1,24 +1,22 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
+import { HOST_URL } from '../config';
 import axios from 'axios';
+import { useCounter} from '@/stores/counter'
+
+const storeCounter = useCounter()
 
 const isEmpty = ref()
+const cartSize = ref(0);
 const products = ref([])
-let role =  ref()
-let initials = ref()
-
-    role.value =  localStorage.getItem('role');
-    initials.value = localStorage.getItem('initials');
+const role =  ref(localStorage.getItem('role'));
 
 function dropdown(){
     console.log('Dropdown');
-    const list = ['Profile', 'Orders', 'Logout'];
     
     const dropdown = document.querySelector('.dropdown');
     dropdown.classList.toggle('hidden');
-    
-
 }
 
 function logout(){
@@ -31,13 +29,25 @@ function search(searchQuery){
 
     const token =  localStorage.getItem('token');
     axios.defaults. headers. common ['Authorization'] = `Bearer ${token}`;
-    axios.get(`http://localhost:8080/api/v1/products/search?name=${searchQuery}`)
+    axios.get(`${HOST_URL}api/v1/products/search?name=${searchQuery}`)
     .then((response) => {
         products.value = response.data;
         isEmpty.value = true
         console.log(response.data);
         console.log(products.length);
         console.log(products);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+function getCart(){
+    const token =  localStorage.getItem('token');
+    axios.defaults. headers. common ['Authorization'] = `Bearer ${token}`;
+    axios.get(`${HOST_URL}api/v1/order/cartSize`)
+    .then((response) => {
+        console.log(response.data);
     })
     .catch((error) => {
         console.log(error);
@@ -51,23 +61,23 @@ function search(searchQuery){
     <div class="container mx-auto px-6 py-4">
     <div class="flex items-center justify-between">
         <div class="flex items-center space-x-2">
-            <img src="../assets/images/logo.svg" alt="">
+            <img class="w-20 h-20 ml-38" src="https://github.com/XanderJ1/images/raw/25f3d1e48bd80d96668641c82f71afa5dcb88ff5/logo1.png" alt="">
         </div>
         
         <div class="flex items-center text-xl   space-x-8">
             <a href="#">Categories</a>
             <a href="#">Deals </a>
-            <a href="#">What's New </a>
+            <a @click="getCart()" href="#">What's New </a>
             <div v-if="role === 'SELLER'">
-                <RouterLink to="/addProduct">Add Product  </RouterLink>
+                <RouterLink to="/addProduct">Add Product</RouterLink>
             </div>
             
             <div v-if="role !== 'SELLER'">
             <div class="search">
-                <label class="input">
-                <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></g></svg>
+                <label class="input rounded-3xl w-100">
                 <input v-model="searchQuery" type="search" required placeholder="Search" @keydown.enter="search(searchQuery)">
-            </label>
+                <i @click="search(searchQuery)" class="pi pi-search cursor-pointer"></i>
+                </label>
             <div v-if="products.length>=1"  class="suggestions">
                 <div v-for="product in products">
                     <ul>
@@ -87,8 +97,8 @@ function search(searchQuery){
             <div class="flex items-center text-xl space-x-2">
             <div v-if="role == 'BUYER'">
             <div class="flex space-x-2">
-                <img src="../assets/images/shopping-cart.svg" class="w-5 h-5" alt="">
-            <span><RouterLink to="/cart">Cart</RouterLink> </span>
+            <img src="../assets/images/shopping-cart.svg" class="w-5 h-5" alt="">
+            <span><RouterLink to="/cart">Cart {{ storeCounter.count }}</RouterLink> </span>
             </div>
             
             </div>
@@ -106,16 +116,16 @@ function search(searchQuery){
 
             <div class="flex items-center space-x-2">
 
-            <!-- SignUp or Initials     --->   
+            <!-- SignUp or Initials     --->
 
             <div v-if="role === 'SELLER' || role === 'BUYER'">
                 <div class="flex flex-col">
                 <div class="flex space-x-2">
-                <span @click="dropdown()" class="bg-blue-500 text-white rounded-full p-2">{{initials}}</span>
+                <span @click="dropdown()"><img class="h- w-8 p-1 border rounded-2xl" src="../assets/images/user-solid.svg"></span>
                 <img src="../assets/images/caret-down-solid.svg" class="w-5 h-5" alt="">
                 </div>
                 </div>
-                <div class="dropdown hidden absolute bg-white border border-gray-300 w-32 z-1">
+                <div @mouseleave="dropdown()" class="dropdown hidden absolute bg-white border border-gray-300 w-32 z-1">
                     <ul>
                         <li><RouterLink to="/profile">Profile</RouterLink></li>
                         <li><RouterLink to="/orders">Orders</RouterLink></li>
@@ -130,10 +140,11 @@ function search(searchQuery){
                 </div>
             </div>
             <div v-else>
-                <div class="flex items-center space-x-2">
-                    <img src="../assets/images/user.svg" class="w-5 h-5" alt="">
-                <span><RouterLink to="/login"> Log In </RouterLink></span>  <span>/ </span>  
-                <span><RouterLink to="/signup"> SignUp  </RouterLink></span>
+                <div class="flex items-center space-x-2v p-2 bg-orange-400 border border-orange-400 rounded-2xl">
+                <span class=" text-white"><RouterLink to="/login"> Log In </RouterLink></span> 
+                  <div class="w-px h-8 bg-white mx-2"></div>
+                <span class="text-white"><RouterLink to="/signup"> SignUp  </RouterLink></span>
+                
                 </div>
             </div>
             </div>
