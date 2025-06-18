@@ -3,7 +3,6 @@ import router from './router'
 import { createPinia } from 'pinia';
 import 'primeicons/primeicons.css';
 
-
 import { createApp } from 'vue'
 import App from './App.vue'
 import "@fontsource/poppins"; 

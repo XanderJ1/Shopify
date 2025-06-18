@@ -62,7 +62,7 @@ function remove(productId){
     axios.post(`${HOST_URL}api/v1/products/removeFromCart/${productId}`, orderedProducts.value)
     .then((response) => {
         console.log(response.data);
-        alert('Order placed successfully!');
+        alert('Item removed');
     })
     .catch((error) => {
         console.error('Error placing order:', error);
@@ -114,9 +114,9 @@ watch(orderedProducts, (newValue) => {
     <div class="bg-white min-w-100 px-10 text-center text-2xl mt-10">
     <h2 class="text-2xl">Payment Method</h2>
     <div class="flex items-center justify-center space-x-2 py-4">
-        <img class="w-10 h-10" src="../assets/images/account.svg" alt="Visa">
-        <img class="w-10 h-10" src="../assets/images/airpod.png" alt="MasterCard">
-        <img class="w-10 h-10" src="../assets/images/avatar-shanai.png" alt="PayPal">
+        <img class="w-10 h-10" src="../assets/images/paystack.png" alt="Visa">
+        <img class="w-10 h-10" src="../assets/images/visa.png" alt="MasterCard">
+        <img class="w-10 h-10" src="../assets/images/gpay.jpg" alt="PayPal">
     </div>
 
     <div class="py-4 text-left pl-15" >

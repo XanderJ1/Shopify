@@ -7,15 +7,10 @@ import Foot from '@/views/Foot.vue';
 
 <template>
     <Navbar />
-    <div class="maincontent">
-      <RouterView />
-    </div>
-    
+    <RouterView />    
     <Foot />
 </template>
 
 <style scoped>
-.maincontent{
-min-height: 100vh;
-}
+
 </style>

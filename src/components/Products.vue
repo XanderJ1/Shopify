@@ -100,6 +100,9 @@ onMounted(() => fetch());
             display: flex;
             justify-content: center;
             background-color: rgb(239, 233, 233);
+            border-radius: 5px;
+            height: 230px;
+            align-items: center;
         }
         .firstProduct img{
             height: 200px;

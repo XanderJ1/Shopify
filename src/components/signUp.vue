@@ -64,7 +64,8 @@ function handleSubmit(){
         </select>
 
             <button type="submit">Sign Up</button>
-            <p class="Login">Already have an acount?  <RouterLink to="/login"><span>Log in</span></RouterLink></p>
+            <p class="Login">Already have an acount?  
+            <RouterLink to="/login"><span>Log in</span></RouterLink></p>
         </form>
     </main>
 

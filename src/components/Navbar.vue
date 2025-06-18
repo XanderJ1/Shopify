@@ -61,10 +61,10 @@ function getCart(){
     <div class="container mx-auto px-6 py-4">
     <div class="flex items-center justify-between">
         <div class="flex items-center space-x-2">
-            <img class="w-20 h-20 ml-38" src="https://github.com/XanderJ1/images/raw/25f3d1e48bd80d96668641c82f71afa5dcb88ff5/logo1.png" alt="">
+            <img class="w-20 h-20 ml-5" src="https://github.com/XanderJ1/images/raw/25f3d1e48bd80d96668641c82f71afa5dcb88ff5/logo1.png" alt="">
         </div>
         
-        <div class="flex items-center text-xl   space-x-8">
+        <div class="flex items-center text-xl space-x-8">
             <a href="#">Categories</a>
             <a href="#">Deals </a>
             <a @click="getCart()" href="#">What's New </a>

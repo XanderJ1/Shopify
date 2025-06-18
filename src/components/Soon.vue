@@ -12,7 +12,7 @@
                     Shop now
             </button>
         </div>
-        <img class="w-80 h-80 mx-4 mr-20 " src="../assets/images/iphone-16.png">
+        <img class="w-80 h-80 mx-4 mr-20 " src="../assets/images/ps4.jpg">
         </div>
     </div>
 </template>

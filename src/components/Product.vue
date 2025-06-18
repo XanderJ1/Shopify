@@ -60,9 +60,9 @@ onMounted(() => {
         <div class="row">
             <div class="column1">
                 <div class="up">
-                    <div class="img-cont" :product>
+                    <!-- <div class="img-cont" :product> -->
                     <img :src="`data:${product.imageType};base64,${product.imageData}`" alt="">
-                    </div>
+                    <!-- </div> -->
                 </div>
                 <div class="down">
                     <img src="../assets/images/airmax.png" alt="">
@@ -89,16 +89,10 @@ onMounted(() => {
             </div>
             </div>
         </div>  
-        <div class="add">
-            <div class="plus">
-                <font-awesome-icon :icon="['fas', 'plus']" />
-            </div>
-            <div class="number">
-                3
-            </div>
-            <div class="minus">
-                -
-            </div>
+        <div class="add flex">
+            <i class="pi pi-minus"></i>
+            <h3 class="p-10">3</h3>
+            <i class="pi pi-plus pl-8"></i>
         </div>  
         <div class="buttons" :product>
             <button class="buy" @click="buyIt(6)">Buy Now</button>
@@ -120,6 +114,7 @@ onMounted(() => {
 main{
     margin: 10px 60px;
     padding: 30px;
+    margin-bottom: 160px;
 }
 .row{
     display: flex;
@@ -237,6 +232,10 @@ main{
     padding-left: 20px;
     padding-right: 20px;
     
+}
+h3{
+    padding-left: 3px;
+    padding-right: 3px;
 }
 .cart{
     border: 1px solid black;
