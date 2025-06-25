@@ -16,7 +16,9 @@ function handleSubmit(){
         console.log(array.user.role + "Role")
         localStorage.setItem('token', array.token);
         localStorage.setItem("role", array.user.role)
-        router.push('/')
+        router.push('/').then(() => {
+        location.reload();  
+        })
     })
 }
 </script>

@@ -23,6 +23,7 @@ function logout(){
     localStorage.setItem('token',"");
     localStorage.setItem('role', "");
     localStorage.setItem('initials', "");
+    location.reload();
 }
 
 function search(searchQuery){
@@ -69,7 +70,9 @@ function getCart(){
             <a href="#">Deals </a>
             <a @click="getCart()" href="#">What's New </a>
             <div v-if="role === 'SELLER'">
-                <RouterLink to="/addProduct">Add Product</RouterLink>
+                <RouterLink to="/addProduct">
+                    <i class="pi pi-plus"></i>Add Product
+                </RouterLink>
             </div>
             
             <div v-if="role !== 'SELLER'">
@@ -140,12 +143,24 @@ function getCart(){
                 </div>
             </div>
             <div v-else>
-                <div class="flex items-center space-x-2v p-2 bg-orange-400 border border-orange-400 rounded-2xl">
+            <div class="flex items-center">
+            <RouterLink to="/login">
+                <h2 class="text-xl text-center p-2 mr-2 bg-indigo-500 text-white border border-indigo-500 rounded-xl">
+                Login
+            </h2>
+            </RouterLink>
+            <RouterLink to="/signup">
+                <h2 class="text-xl text-center p-2 mr-5 bg-indigo-500 text-white border border-indigo-500 rounded-xl">
+                Sign Up
+            </h2>
+            </RouterLink>
+        </div>
+                <!-- <div class="flex items-center space-x-2v p-2 bg-orange-400 border border-orange-400 rounded-2xl">
                 <span class=" text-white"><RouterLink to="/login"> Log In </RouterLink></span> 
                   <div class="w-px h-8 bg-white mx-2"></div>
                 <span class="text-white"><RouterLink to="/signup"> SignUp  </RouterLink></span>
                 
-                </div>
+                </div> -->
             </div>
             </div>
             

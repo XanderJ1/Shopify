@@ -89,10 +89,10 @@ onMounted(() => {
             </div>
             </div>
         </div>  
-        <div class="add flex">
-            <i class="pi pi-minus"></i>
-            <h3 class="p-10">3</h3>
-            <i class="pi pi-plus pl-8"></i>
+        <div class="add flex bg-gray-300 rounded-2xl w-30 h-8 items-center p-2 justify-around">
+            <i class="pi pi-minus text-xl"></i>
+            <h3 class="p-10 text-xl">1</h3>
+            <i class="pi pi-plus text-xl"></i>
         </div>  
         <div class="buttons" :product>
             <button class="buy" @click="buyIt(6)">Buy Now</button>
@@ -203,22 +203,6 @@ main{
     background-color: rgb(21, 35, 97);
     padding: 20px 20px;
     margin: 10px;
-}
-.add{
-    background: gray;
-    display: flex;
-    border-radius: 40px;
-    padding: 10px;
-    width: 70px;
-    justify-content: space-between;
-    margin-top: 30px;
-
-}
-.add .plus{
-
-}
-.add .minus{
-
 }
 .buttons{
     margin: 4rem 0px 2rem 0px;
