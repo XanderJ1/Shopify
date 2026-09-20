@@ -1,13 +1,17 @@
 <script setup>
+import { ref } from 'vue';
+const submitting = ref(false);
+const formError = ref('');
 import { RouterLink, useRouter } from 'vue-router';
 import axios from 'axios';
 import { HOST_URL } from '../config';
 
 const router = useRouter();
 
-function handleSubmit(){
-    console.log('hello');
-
+function handleSubmit() {
+    if (submitting.value) return;
+    submitting.value = true;
+    formError.value = '';
 
     const username = document.getElementById('username').value;
     const email = document.getElementById('email').value;
@@ -15,8 +19,8 @@ function handleSubmit(){
     const role = document.getElementById('role').value;
     
     const array = [username, email, password, role];
-    console.log(array);
-    console.log(`${HOST_URL}auth/register` + "  " +array[0])
+
+
     axios.post(`${HOST_URL}auth/register`, {
         username: username,
         email: email,
@@ -24,168 +28,51 @@ function handleSubmit(){
         role: role
     })
     .then((response) => {
-        console.log(response.data);
+
         router.push('/login');
     })
-    .catch((error) => {
-        console.log(error);
-    });
+    .catch(() => { formError.value = 'We couldn?t create your account. Please check your details and try again.'; })
+    .finally(() => { submitting.value = false; });
 
 }
 </script>
 
 <template>
-<body>
-    <div class="container">
-    <main>
-        <div class="other">
-            <h3>Create Your Account</h3>
-            <p>Let's get started with your 30 days free trial</p>
-            <div class="google">
-                <img src="../assets/images/google.svg" alt="Google">
-                <p>Sign Up with Google</p>
-            </div>
-        </div>
-
-        <form @submit.prevent="handleSubmit" >
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" required>
-
-        <label for="email">Email</label>
-        <input type="text" id="email" name="email" required>
-
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required>
-
-        <select name="role" id="role">
-            <option value="BUYER">BUYER</option>
-            <option value="SELLER">SELLER</option>
-
-        </select>
-
-            <button type="submit">Sign Up</button>
-            <p class="Login">Already have an acount?  
-            <RouterLink to="/login"><span>Log in</span></RouterLink></p>
+  <section class="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-16 lg:px-8">
+    <div class="grid overflow-hidden rounded-2xl border border-stone-200 lg:grid-cols-2">
+      <div class="relative hidden min-h-144 flex-col overflow-hidden bg-emerald-950 p-10 text-orange-50 lg:flex disabled:opacity-60">
+        <p class="text-xs uppercase tracking-widest text-orange-200">Your kind of discovery</p>
+        <h2 class="relative z-10 mt-6 font-serif text-5xl leading-tight">Good finds.<br><em>Great days.</em></h2>
+        <p class="relative z-10 mt-5 max-w-xs text-sm leading-relaxed text-emerald-100">A place for your next favourite. Make yourself at home.</p>
+        <div class="absolute -bottom-24 right-0 h-96 w-80 rounded-t-full bg-emerald-800"></div>
+        <img src="../assets/images/headphone.png" alt="" class="absolute bottom-0 right-0 h-80 w-auto object-contain">
+      </div>
+      <div class="p-6 sm:p-10 lg:p-12">
+        <RouterLink to="/" class="inline-flex min-h-11 items-center gap-2 text-sm text-stone-500 hover:text-emerald-950"><i class="pi pi-arrow-left" aria-hidden="true"></i>Back to discovery</RouterLink>
+        <h1 class="mt-5 font-serif text-4xl tracking-tight text-emerald-950">Make yourself at home.</h1>
+        <p class="mt-3 text-base text-stone-500">Your next favourite is waiting to be found.</p>
+        <form @submit.prevent="handleSubmit" class="mt-8 space-y-5">
+          <div class="space-y-2">
+            <label for="username" class="block text-sm font-medium text-stone-700">Username</label>
+            <input id="username" name="username" type="text" autocomplete="username" required class="min-h-12 w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-base transition-colors hover:border-stone-500">
+          </div>
+          <div class="space-y-2">
+            <label for="email" class="block text-sm font-medium text-stone-700">Email address</label>
+            <input id="email" name="email" type="email" autocomplete="email" required class="min-h-12 w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-base transition-colors hover:border-stone-500">
+          </div>
+          <div class="space-y-2">
+            <label for="password" class="block text-sm font-medium text-stone-700">Password</label>
+            <input id="password" name="password" type="password" autocomplete="new-password" required class="min-h-12 w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-base transition-colors hover:border-stone-500">
+          </div>
+          <div class="space-y-2">
+            <label for="role" class="block text-sm font-medium text-stone-700">I?m here to</label>
+            <select id="role" name="role" class="min-h-12 w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-base transition-colors hover:border-stone-500"><option value="BUYER">Discover and shop</option><option value="SELLER">Sell my products</option></select>
+          </div>
+          <p v-if="formError" role="alert" class="text-sm text-red-800">{{ formError }}</p>
+          <button type="submit" :disabled="submitting" :aria-busy="submitting" class="min-h-12 rounded-full bg-emerald-950 px-6 py-3 text-sm font-medium text-white hover:bg-emerald-800 w-full disabled:opacity-60">{{ submitting ? 'Creating account?' : 'Create my account' }} <i class="pi pi-arrow-right ml-3" aria-hidden="true"></i></button>
+          <p class="pt-2 text-center text-sm text-stone-500">Already part of the collection? <RouterLink to="/login" class="font-medium text-emerald-950 underline underline-offset-4">Sign in</RouterLink></p>
         </form>
-    </main>
-
-    <aside>
-        <img src="../assets/images/task.jpg" alt="">
-    </aside>
-</div>
-
-</body>
+      </div>
+    </div>
+  </section>
 </template>
-
-<style scoped>
-*{
-    margin: 0;
-    padding: 0;
-    font-family: 'Lato', sans-serif;
-    box-sizing: border-box;
-}
-
-logo{
-    display: flex;
-    height: 50px;
-    width: 15px;
-}
-.Login{
-    font-size: 20px;
-}
-.container{
-    display: flex;
-    justify-content: space-around;
-    height: 100vh;
-    background: #f1f1f1;
-    margin: 4rem 6rem;
-}
-main{
-    flex-basis: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background: #f1f1f1;
-}
-aside img{
-    width: 40rem;
-    flex-basis: 40%;
-    height: 85vh;
-    margin-top: 20px;
-}
-.other{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #f1f1f1;
-}
-
-.other .google{
-    margin: 20px 0px 0px 0px;
-    border: 1px solid black;
-    padding: 5px 10px 5px 10px;
-    border-radius: 10px;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-}
-.other p{
-    margin-bottom: 10px;
-}
-.other img{
-    width:  15px;
-    height: 15px;
-    margin-bottom: 8px;
-    margin-right: 8px;
-}
-.other h3{
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
-
-main h3{
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
-
-main form{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 300px;
-    margin: 50px;
-}
-
-.test{
-border: 1px solid black;
-border-radius: 10px;
-}
-
-main form input{
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-}
-
-#role{
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-}
-main form button{
-    border: 1px solid black;
-    height: 3rem;
-    margin: 10px 0px 10px;
-    color: white;
-    background-color: rgb(26, 25, 25);
-    border-radius: 20px;
-}
-
-</style>

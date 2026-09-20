@@ -1,232 +1,95 @@
 <script setup>
-import {ref, defineProps, onMounted} from 'vue'
-import axios from 'axios'
+import { ref, watch } from 'vue';
+import axios from 'axios';
+import { RouterLink } from 'vue-router';
 import { HOST_URL } from '../config';
-import { useCounter } from '@/stores/counter'
+import { useCounter } from '@/stores/counter';
 
+const storeCounter = useCounter();
+const product = ref({});
+const loading = ref(true);
+const loadError = ref(false);
+const adding = ref(false);
+const buying = ref(false);
+const feedback = ref('');
+const feedbackError = ref(false);
+const props = defineProps({ id: { type: [String, Number], default: 2 } });
+const formatPrice = value => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(value));
 
-const storeCounter = useCounter()
-const product = ref({})
-const props = defineProps({
-   id:{
-    type: Number,
-    default: 2   
-   }
-})
-
+function get() {
+  const id = props.id;
+  const token = localStorage.getItem('token');
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  loading.value = true;
+  loadError.value = false;
+  feedback.value = '';
+  axios.get(`${HOST_URL}api/v1/products/${id}`)
+    .then(response => { if (id === props.id) product.value = response.data; })
+    .catch(() => { if (id === props.id) loadError.value = true; })
+    .finally(() => { if (id === props.id) loading.value = false; });
+}
 function buyIt(productId) {
-    axios.post(`${HOST_URL}api/v1/products/buy`)
-    .then((response) => {
-        alert(response.data)
-    })
-    .catch((error) => {
-        console.log(error)
-    })
+  if (buying.value) return;
+  buying.value = true;
+  axios.post(`${HOST_URL}api/v1/products/buy`)
+    .then(response => { alert(response.data); })
+    .catch(() => { feedbackError.value = true; feedback.value = 'We couldn?t complete your request. Please try again.'; })
+    .finally(() => { buying.value = false; });
 }
-
-const id = props.id
-function get(){
-    const token =  localStorage.getItem('token');
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    axios.get(`${HOST_URL}api/v1/products/${id}`)
-    .then(response => {
-        console.log(response.data)
-        product.value=response.data
+function addToCart(id) {
+  if (adding.value) return;
+  adding.value = true;
+  feedback.value = '';
+  axios.post(`${HOST_URL}api/v1/products/addToCart/${id}`)
+    .then(() => {
+      storeCounter.increment();
+      feedbackError.value = false;
+      feedback.value = 'Added to your shopping bag.';
     })
+    .catch(() => { feedbackError.value = true; feedback.value = 'We couldn?t add this item. Please try again.'; })
+    .finally(() => { adding.value = false; });
 }
-
-
-
-function addToCart(id){
-    axios.post(`${HOST_URL}api/v1/products/addToCart/${id}`)
-    .then((response) => {
-        alert(response.data)
-        storeCounter.increment()
-    })
-    .catch((error) => {
-        console.log(error)
-    })
-}
-
-
-onMounted(() => {
-    get()
-})
-
+watch(() => props.id, get, { immediate: true });
 </script>
 
 <template>
-        <main>
-        <div class="row">
-            <div class="column1">
-                <div class="up">
-                    <!-- <div class="img-cont" :product> -->
-                    <img :src="`data:${product.imageType};base64,${product.imageData}`" alt="">
-                    <!-- </div> -->
-                </div>
-                <div class="down">
-                    <img src="../assets/images/airmax.png" alt="">
-                    <img src="../assets/images/AirPods Max Headphones Green.H02.watermarked.2k.png" alt="">
-                    <img src="../assets/images/airpod.png" alt="">
-                    <img src="../assets/images/AirPods Max Headphones Silver.G03.watermarked.2k.png">
-                </div>
-            </div>
-        <div class="column">
-            <div class="message">
-            <h1>Airpods- Max</h1>
-            <p>Original Classic, IPX8 certified 2024 edition</p>
-            <div class="stars"><i class="pi pi-star-fill text-orange-500"></i><i class="pi pi-star-fill text-orange-500"></i><i class="pi pi-star-fill text-orange-500"></i><i class="pi pi-star-fill text-orange-500"></i><i class="pi pi-star-fill text-orange-500"></i></div>
-            <div class="discount">
-                <h3>Pay $350.00 or $20.00/month</h3>
-                <p>You can pay just 20 dollars per month for the product</p>
-            </div>
-            <div class="coon">
-                <h4>Color</h4>
-            <div class="colours">
-                <p>Red</p>
-                <p>Green</p>
-                <p>Blue</p>
-            </div>
-            </div>
-        </div>  
-        <div class="add flex bg-gray-300 rounded-2xl w-30 h-8 items-center p-2 justify-around">
-            <i class="pi pi-minus text-xl"></i>
-            <h3 class="p-10 text-xl">1</h3>
-            <i class="pi pi-plus text-xl"></i>
-        </div>  
-        <div class="buttons" :product>
-            <button class="buy" @click="buyIt(6)">Buy Now</button>
-            <button @click="addToCart(product.id)" class="cart cursor-pointer"> Add to Cart</button>
-        </div>        
+  <section class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:pb-16 lg:px-8">
+    <nav aria-label="Breadcrumb" class="mb-6 flex flex-wrap items-center gap-3 text-sm text-stone-500">
+      <RouterLink to="/" class="inline-flex min-h-11 items-center hover:text-emerald-950">Home</RouterLink>
+      <i class="pi pi-angle-right text-xs" aria-hidden="true"></i>
+      <RouterLink :to="{ path: '/', hash: '#featured-products' }" class="inline-flex min-h-11 items-center hover:text-emerald-950">The collection</RouterLink>
+      <template v-if="!loading && !loadError"><i class="pi pi-angle-right text-xs" aria-hidden="true"></i><span aria-current="page" class="min-w-0 break-words text-stone-800">{{ product.name }}</span></template>
+    </nav>
+    <div v-if="loading" role="status" class="grid gap-8 lg:grid-cols-2">
+      <span class="sr-only">Loading product</span>
+      <div class="aspect-square rounded-2xl bg-stone-100 motion-safe:animate-pulse"></div>
+      <div aria-hidden="true" class="space-y-6 py-12 motion-safe:animate-pulse"><div class="h-8 w-3/4 rounded bg-stone-100"></div><div class="h-5 w-1/4 rounded bg-stone-100"></div><div class="h-32 rounded bg-stone-100"></div></div>
     </div>
+    <div v-else-if="loadError" class="rounded-2xl bg-stone-50 px-6 py-16 text-center">
+      <h1 class="font-serif text-3xl text-emerald-950">This find is taking a moment.</h1>
+      <p class="mt-4 text-stone-600">We couldn?t load this product. Please try again.</p>
+      <button @click="get" type="button" class="mt-6 min-h-12 rounded-full bg-emerald-950 px-6 text-sm text-white">Try again</button>
     </div>
-    </main>
+    <div v-else class="grid gap-8 lg:grid-cols-2 lg:gap-16">
+      <div class="flex aspect-square items-center justify-center rounded-2xl bg-stone-100 p-8 sm:p-12">
+        <img v-if="product.imageData" :src="`data:${product.imageType};base64,${product.imageData}`" :alt="product.name" class="h-full w-full object-contain mix-blend-multiply">
+        <i v-else class="pi pi-image text-5xl text-stone-400" aria-hidden="true"></i>
+      </div>
+      <div class="min-w-0 self-center py-4">
+        <p class="text-xs font-medium uppercase tracking-widest text-orange-800">A ShopEase find</p>
+        <h1 class="mt-4 break-words font-serif text-4xl leading-tight tracking-tight text-emerald-950 sm:text-5xl">{{ product.name }}</h1>
+        <p v-if="product.price != null" class="mt-6 text-2xl font-medium text-emerald-950">{{ formatPrice(product.price) }}</p>
+        <div class="my-8 border-t border-stone-200 pt-6">
+          <h2 class="text-sm font-medium text-stone-900">The details</h2>
+          <p class="mt-3 max-w-prose whitespace-pre-line break-words text-base leading-relaxed text-stone-600">{{ product.description }}</p>
+        </div>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <button type="button" @click="addToCart(product.id)" :disabled="adding" class="flex min-h-14 items-center justify-center gap-3 rounded-full bg-emerald-950 px-6 py-3 text-sm font-medium text-white hover:bg-emerald-800 disabled:opacity-60"><i :class="adding ? 'pi pi-spinner motion-safe:animate-spin' : 'pi pi-shopping-bag'" aria-hidden="true"></i>{{ adding ? 'Adding?' : 'Add to bag' }}</button>
+          <button type="button" @click="buyIt(product.id)" :disabled="buying" class="min-h-14 rounded-full border border-emerald-950 px-6 py-3 text-sm font-medium text-emerald-950 hover:bg-stone-100 disabled:opacity-60">{{ buying ? 'One moment?' : 'Buy now' }}</button>
+        </div>
+        <p role="status" aria-live="polite" class="mt-4 text-sm" :class="feedbackError ? 'text-red-800' : 'text-emerald-900'">{{ feedback }}</p>
+        <RouterLink to="/cart" class="mt-4 inline-flex min-h-11 items-center gap-3 text-sm text-stone-600 underline underline-offset-4">View shopping bag <i class="pi pi-arrow-right" aria-hidden="true"></i></RouterLink>
+      </div>
+    </div>
+  </section>
 </template>
-
-<style scoped>
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', serif;
-   
-}
-main{
-    margin: 10px 60px;
-    padding: 30px;
-    margin-bottom: 160px;
-}
-.row{
-    display: flex;
-
-}
-.column{
-    display: flex;
-    flex-basis: 50%;
-    flex-direction: column;
-    margin-left: 2rem;
-}
-.column1{
-    display: flex;
-    margin-right: 2rem;
-    flex-basis: 50%;
-    flex-direction: column;
-    max-width: 100rem;
-    height: 20rem;
-}
-.column1 .up{
-    display: flex;
-    padding: 10px;
-    margin: 10px;
-    justify-content: center;
-    background-color: rgb(239, 233, 233);
-}
-.column1 .up .img-cont{
-    display: flex;
-}
-.column1 .up img{
-    width: 20rem;
-    height: 25rem;
-}
-.column1 .down{
-    display: flex;
-    min-height: 30rem;
-}
-.column1 .down img{
-    flex-basis: 25%;
-    width: 8rem;
-    height: 10rem;
-}
-.column .message{
-    display: flex;
-    flex-direction: column;
-}
-.message h1{
-    margin-top: 5px;
-}
-.message p{
-    margin: 10px 0px 10px 0px;
-    color: gray;
-}
-.message .discount{
-    margin: 45px 0px 25px 0px;
-}
-.column .coon{
-    display: flex;
-    flex-direction: column;
-}
-.column .colours{
-    display: flex;
-    justify-content: space-between;
-    width: 50px;
-}
-.column .colours p{
-    margin-right: 10px;
-}
-.column .colours .color{
-    border: 1px solid brown;
-    border-radius: 80%;
-    background-color: brown;
-    padding: 20px 20px;
-    margin: 10px;
-}
-.column .colours .color1{
-    border: 1px solid coral;
-    border-radius: 80%;
-    background-color: coral;
-    padding: 10px 20px;
-    margin: 10px;
-}
-.column .colours .color2{
-    border: 1px solid rgb(21, 35, 97);
-    border-radius: 80%;
-    background-color: rgb(21, 35, 97);
-    padding: 20px 20px;
-    margin: 10px;
-}
-.buttons{
-    margin: 4rem 0px 2rem 0px;
-}
-.buy{
-    border: 1px solid green;
-    background-color: green;
-    padding: 10px;
-    border-radius: 20px;
-    color: white;
-    padding-left: 20px;
-    padding-right: 20px;
-    
-}
-h3{
-    padding-left: 3px;
-    padding-right: 3px;
-}
-.cart{
-    border: 1px solid black;
-    border-radius: 20px;
-    padding: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    margin-left: 10px;
-}
-</style>

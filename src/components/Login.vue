@@ -1,161 +1,65 @@
 <script setup>
+import { ref } from 'vue';
+const submitting = ref(false);
+const formError = ref('');
 import axios from 'axios';
 import router from '@/router';
 import { HOST_URL } from '@/config.js';
-function handleSubmit(){
+function handleSubmit() {
+    if (submitting.value) return;
+    submitting.value = true;
+    formError.value = '';
     const user = {
         username: document.getElementById('username').value,
         password: document.getElementById('password').value
     }
-    console.log(`${HOST_URL}auth/signIn` + user.username)
+
     axios.post(`${HOST_URL}auth/signIn`, user)
     .then((response) => {
-        console.log(response.data)
+
         const array = response.data
-        console.log(array.token + "Token")
-        console.log(array.user.role + "Role")
+
+
         localStorage.setItem('token', array.token);
-        localStorage.setItem("role", array.user.role)
+        localStorage.setItem("role", array.role)
         router.push('/').then(() => {
         location.reload();  
         })
     })
+    .catch(() => { formError.value = 'We couldn?t sign you in. Check your details and try again.'; })
+    .finally(() => { submitting.value = false; });
 }
 </script>
 
 <template>
-    <body>
-    <div class="container">
-        <main>
-            <div class="other">
-                <h3>Create Your Account</h3>
-                <p>Let's get started with your 30 days free trial</p>
-                <div class="google">
-                    <img src="../assets/images/google.svg" alt="Google">
-                    <p>Sign Up with Google</p>
-                </div>
-            </div>
-    
-            <form @submit.prevent="handleSubmit" th:object="${user}" method="POST">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" required>
-    
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" autocomplete="current-password" required>
-            <button type="submit">Log In</button>
-            </form>
-    
-        </main>
-    
-        <aside>
-            <img src="../assets/images/task.jpg" alt="">
-        </aside>
+  <section class="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-16 lg:px-8">
+    <div class="grid overflow-hidden rounded-2xl border border-stone-200 lg:grid-cols-2">
+      <div class="relative hidden min-h-144 flex-col overflow-hidden bg-emerald-950 p-10 text-orange-50 lg:flex disabled:opacity-60">
+        <p class="text-xs uppercase tracking-widest text-orange-200">Your kind of discovery</p>
+        <h2 class="relative z-10 mt-6 font-serif text-5xl leading-tight">Good finds.<br><em>Great days.</em></h2>
+        <p class="relative z-10 mt-5 max-w-xs text-sm leading-relaxed text-emerald-100">A place for your next favourite. Make yourself at home.</p>
+        <div class="absolute -bottom-24 right-0 h-96 w-80 rounded-t-full bg-emerald-800"></div>
+        <img src="../assets/images/headphone.png" alt="" class="absolute bottom-0 right-0 h-80 w-auto object-contain">
+      </div>
+      <div class="p-6 sm:p-10 lg:p-12">
+        <RouterLink to="/" class="inline-flex min-h-11 items-center gap-2 text-sm text-stone-500 hover:text-emerald-950"><i class="pi pi-arrow-left" aria-hidden="true"></i>Back to discovery</RouterLink>
+        <h1 class="mt-5 font-serif text-4xl tracking-tight text-emerald-950">Welcome back.</h1>
+        <p class="mt-3 text-base text-stone-500">Sign in to pick up where you left off.</p>
+        <form @submit.prevent="handleSubmit" class="mt-8 space-y-5">
+          <div class="space-y-2">
+            <label for="username" class="block text-sm font-medium text-stone-700">Username</label>
+            <input id="username" name="username" type="text" autocomplete="username" required class="min-h-12 w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-base transition-colors hover:border-stone-500">
+          </div>
+          <div class="space-y-2">
+            <label for="password" class="block text-sm font-medium text-stone-700">Password</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" required class="min-h-12 w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-base transition-colors hover:border-stone-500">
+          </div>
+
+          <p v-if="formError" role="alert" class="text-sm text-red-800">{{ formError }}</p>
+          <button type="submit" :disabled="submitting" :aria-busy="submitting" class="min-h-12 rounded-full bg-emerald-950 px-6 py-3 text-sm font-medium text-white hover:bg-emerald-800 w-full disabled:opacity-60">{{ submitting ? 'Signing in?' : 'Sign in' }} <i class="pi pi-arrow-right ml-3" aria-hidden="true"></i></button>
+          <p class="pt-2 text-center text-sm text-stone-500">New to ShopEase? <RouterLink to="/signup" class="font-medium text-emerald-950 underline underline-offset-4">Join us</RouterLink></p>
+        </form>
+      </div>
     </div>
-    
-    </body>
-    
+  </section>
 </template>
-
-<style scoped>
-*{
-    margin: 0;
-    padding: 0;
-    font-family: 'Lato', sans-serif;
-    box-sizing: border-box;
-}
-
-logo{
-    display: flex;
-    height: 50px;
-    width: 15px;
-}
-.container{
-    display: flex;
-    justify-content: space-around;
-    height: 100vh;
-    background: #f1f1f1;
-    margin: 4rem 6rem;
-}
-main{
-    flex-basis: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background: #f1f1f1;
-}
-aside{
-}
-aside img{
-    width: 40rem;
-    flex-basis: 40%;
-    height: 85vh;
-    margin-top: 20px;
-}
-.other{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #f1f1f1;
-}
-
-.other .google{
-    margin: 20px 0px 0px 0px;
-    border: 1px solid black;
-    padding: 5px 10px 5px 10px;
-    border-radius: 10px;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-}
-.other p{
-    margin-bottom: 10px;
-}
-.other img{
-    width:  15px;
-    height: 15px;
-    margin-bottom: 8px;
-    margin-right: 8px;
-}
-.other h3{
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
-
-main h3{
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
-
-main form{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 300px;
-    margin: 50px;
-}
-
-.test{
-border: 1px solid black;
-border-radius: 10px;
-}
-
-main form input{
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-}
-
-main form button{
-    border: 1px solid black;
-    height: 40px;
-    color: white;
-    background-color: rgb(26, 25, 25);
-    border-radius: 20px;
-}
-
-</style>

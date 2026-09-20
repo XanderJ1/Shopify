@@ -1,173 +1,118 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { RouterLink } from 'vue-router';
+import { ref, watch } from 'vue';
+import { RouterLink, useRoute } from 'vue-router';
 import { HOST_URL } from '../config';
 import axios from 'axios';
-import { useCounter} from '@/stores/counter'
+import { useCounter } from '@/stores/counter';
 
-const storeCounter = useCounter()
+const storeCounter = useCounter();
+const route = useRoute();
+const products = ref([]);
+const role = ref(localStorage.getItem('role'));
+const searchQuery = ref('');
+const accountOpen = ref(false);
+const resultsOpen = ref(false);
+const searching = ref(false);
+const searchError = ref(false);
+let latestSearch = 0;
+const categories = ['All', 'Tech', 'Style', 'Home', 'Beauty', 'Accessories'];
 
-const isEmpty = ref()
-const cartSize = ref(0);
-const products = ref([])
-const role =  ref(localStorage.getItem('role'));
-
-function dropdown(){
-    console.log('Dropdown');
-    
-    const dropdown = document.querySelector('.dropdown');
-    dropdown.classList.toggle('hidden');
+function closeAccount(event) {
+  if (!event.currentTarget.contains(event.relatedTarget)) accountOpen.value = false;
 }
-
-function logout(){
-    localStorage.setItem('token',"");
-    localStorage.setItem('role', "");
-    localStorage.setItem('initials', "");
-    location.reload();
+function logout() {
+  localStorage.setItem('token', '');
+  localStorage.setItem('role', '');
+  localStorage.setItem('initials', '');
+  location.reload();
 }
-
-function search(searchQuery){
-
-    const token =  localStorage.getItem('token');
-    axios.defaults. headers. common ['Authorization'] = `Bearer ${token}`;
-    axios.get(`${HOST_URL}api/v1/products/search?name=${searchQuery}`)
-    .then((response) => {
-        products.value = response.data;
-        isEmpty.value = true
-        console.log(response.data);
-        console.log(products.length);
-        console.log(products);
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+function search(searchQuery) {
+  const requestId = ++latestSearch;
+  const token = localStorage.getItem('token');
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  searching.value = true;
+  searchError.value = false;
+  resultsOpen.value = true;
+  axios.get(`${HOST_URL}api/v1/products/search?name=${searchQuery}`)
+    .then(response => { if (requestId === latestSearch) products.value = response.data; })
+    .catch(() => { if (requestId === latestSearch) searchError.value = true; })
+    .finally(() => { if (requestId === latestSearch) searching.value = false; });
 }
-
-function getCart(){
-    const token =  localStorage.getItem('token');
-    axios.defaults. headers. common ['Authorization'] = `Bearer ${token}`;
-    axios.get(`${HOST_URL}api/v1/order/cartSize`)
-    .then((response) => {
-        console.log(response.data);
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+function getCart() {
+  const token = localStorage.getItem('token');
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  axios.get(`${HOST_URL}api/v1/order/cartSize`)
+    .then(response => { console.log(response.data); })
+    .catch(error => { console.log(error); });
 }
-
-
+watch(() => route.fullPath, () => {
+  accountOpen.value = false;
+  resultsOpen.value = false;
+});
 </script>
 
 <template>
-    <div class="container mx-auto px-6 py-4">
-    <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-2">
-            <img class="w-20 h-20 ml-5" src="https://github.com/XanderJ1/images/raw/25f3d1e48bd80d96668641c82f71afa5dcb88ff5/logo1.png" alt="">
-        </div>
-        
-        <div class="flex items-center text-xl space-x-8">
-            <a href="#">Categories</a>
-            <a href="#">Deals </a>
-            <a @click="getCart()" href="#">What's New </a>
-            <div v-if="role === 'SELLER'">
-                <RouterLink to="/addProduct">
-                    <i class="pi pi-plus"></i>Add Product
-                </RouterLink>
-            </div>
-            
-            <div v-if="role !== 'SELLER'">
-            <div class="search">
-                <label class="input rounded-3xl w-100">
-                <input v-model="searchQuery" type="search" required placeholder="Search" @keydown.enter="search(searchQuery)">
-                <i @click="search(searchQuery)" class="pi pi-search cursor-pointer"></i>
-                </label>
-            <div v-if="products.length>=1"  class="suggestions">
-                <div v-for="product in products">
-                    <ul>
-                        <li class="link">
-                            <RouterLink :to="{path: '/product',query: {id: product.id}}">
-                                {{product.name}}
-                            </RouterLink>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            </div>
-            </div>
-        </div>
-        <div class="flex items-center text-xl space-x-6">
-            <!-- Cart or My Products  --->
-            <div class="flex items-center text-xl space-x-2">
-            <div v-if="role == 'BUYER'">
-            <div class="flex space-x-2">
-            <img src="../assets/images/shopping-cart.svg" class="w-5 h-5" alt="">
-            <span><RouterLink to="/cart">Cart {{ storeCounter.count }}</RouterLink> </span>
-            </div>
-            
-            </div>
-            <div v-else-if="role == 'SELLER'">
-            <span><RouterLink to="/myProducts">My Products</RouterLink> </span>
-            </div>
-            </div>
-
-            <div v-if="role == 'SELLER' || role == 'BUYER'">
-                <div class="flex items-center space-x-2">
-            <img src="../assets/images/cube-solid.svg" class="w-5 h-5" alt="">   
-            <span><RouterLink to="/orders">Orders</RouterLink></span>
-            </div>
-            </div>
-
-            <div class="flex items-center space-x-2">
-
-            <!-- SignUp or Initials     --->
-
-            <div v-if="role === 'SELLER' || role === 'BUYER'">
-                <div class="flex flex-col">
-                <div class="flex space-x-2">
-                <span @click="dropdown()"><img class="h- w-8 p-1 border rounded-2xl" src="../assets/images/user-solid.svg"></span>
-                <img src="../assets/images/caret-down-solid.svg" class="w-5 h-5" alt="">
-                </div>
-                </div>
-                <div @mouseleave="dropdown()" class="dropdown hidden absolute bg-white border border-gray-300 w-32 z-1">
-                    <ul>
-                        <li><RouterLink to="/profile">Profile</RouterLink></li>
-                        <li><RouterLink to="/orders">Orders</RouterLink></li>
-                        <li @click="logout()">
-                            <RouterLink to="/">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-red-500"> Logout </span>
-                                <img src="../assets/images/logout.svg" class="w-5 h-5" alt="">
-                            </div>
-                        </RouterLink></li>
-                    </ul>
-                </div>
-            </div>
-            <div v-else>
-            <div class="flex items-center">
-            <RouterLink to="/login">
-                <h2 class="text-xl text-center p-2 mr-2 bg-indigo-500 text-white border border-indigo-500 rounded-xl">
-                Login
-            </h2>
-            </RouterLink>
-            <RouterLink to="/signup">
-                <h2 class="text-xl text-center p-2 mr-5 bg-indigo-500 text-white border border-indigo-500 rounded-xl">
-                Sign Up
-            </h2>
-            </RouterLink>
-        </div>
-                <!-- <div class="flex items-center space-x-2v p-2 bg-orange-400 border border-orange-400 rounded-2xl">
-                <span class=" text-white"><RouterLink to="/login"> Log In </RouterLink></span> 
-                  <div class="w-px h-8 bg-white mx-2"></div>
-                <span class="text-white"><RouterLink to="/signup"> SignUp  </RouterLink></span>
-                
-                </div> -->
-            </div>
-            </div>
-            
-        </div>
+  <header class="relative z-30 border-b border-stone-200 bg-white">
+    <div class="bg-emerald-950 text-orange-50">
+      <div class="mx-auto flex max-w-7xl items-center justify-center gap-3 px-4 py-2 text-xs tracking-wide sm:justify-between sm:px-6 lg:px-8">
+        <p>Good finds. Great days. A little more you.</p>
+        <RouterLink :to="{ path: '/', query: { category: 'All' }, hash: '#featured-products' }" class="hidden items-center gap-2 underline underline-offset-4 sm:inline-flex">Discover the collection <i class="pi pi-arrow-right text-xs" aria-hidden="true"></i></RouterLink>
+      </div>
     </div>
-</div>
-</template>
+    <nav aria-label="Main navigation" class="mx-auto flex max-w-7xl flex-wrap items-center gap-x-6 gap-y-4 px-4 py-5 sm:px-6 lg:px-8">
+      <RouterLink to="/" aria-label="ShopEase home" class="order-1 inline-flex min-h-12 shrink-0 items-center font-serif text-4xl tracking-tight text-emerald-950">ShopEase<span class="text-orange-700">.</span></RouterLink>
 
-<style scoped>
-</style>
+      <div v-if="role !== 'SELLER'" class="relative order-3 w-full lg:order-2 lg:min-w-0 lg:flex-1" @keydown.esc="resultsOpen = false; $refs.searchInput.focus()">
+        <form role="search" @submit.prevent="search(searchQuery)" class="flex min-h-12 items-center rounded-full border border-stone-300 bg-stone-50 p-1 transition-colors focus-within:border-emerald-900">
+          <label for="product-search" class="sr-only">Search products</label>
+          <input ref="searchInput" id="product-search" v-model="searchQuery" type="search" required placeholder="Find your next favourite?" class="min-h-11 min-w-0 flex-1 rounded-full bg-transparent pl-5 pr-2 text-base text-stone-900 placeholder:text-stone-500" :aria-expanded="resultsOpen" aria-controls="search-results">
+          <button type="submit" class="h-11 w-11 shrink-0 rounded-full bg-emerald-950 text-white hover:bg-emerald-800" aria-label="Search products"><i class="pi pi-search" aria-hidden="true"></i></button>
+        </form>
+        <section v-if="resultsOpen" id="search-results" aria-label="Search results" class="absolute z-40 mt-3 max-h-96 w-full overflow-y-auto rounded-2xl border border-stone-200 bg-white p-3 shadow-xl">
+          <div class="flex items-center justify-between gap-4 px-2">
+            <p role="status" class="text-sm text-stone-500">{{ searching ? 'Searching?' : searchError ? 'Search unavailable' : products.length + ' results' }}</p>
+            <button type="button" class="h-11 w-11 rounded-full text-stone-600 hover:bg-stone-100" aria-label="Close search results" @click="resultsOpen = false; $refs.searchInput.focus()"><i class="pi pi-times" aria-hidden="true"></i></button>
+          </div>
+          <p v-if="searchError" role="alert" class="p-4 text-sm text-red-800">We couldn?t search right now. Please try again.</p>
+          <p v-else-if="!searching && !products.length" class="p-4 text-stone-600">No finds just yet. Try another product name.</p>
+          <ul v-else-if="!searching">
+            <li v-for="product in products" :key="product.id">
+              <RouterLink :to="{ path: '/product', query: { id: product.id } }" class="flex min-h-16 items-center gap-4 rounded-xl p-3 hover:bg-stone-50">
+                <img v-if="product.imageData" :src="`data:${product.imageType};base64,${product.imageData}`" alt="" class="h-12 w-12 shrink-0 rounded-lg bg-stone-100 object-contain">
+                <span class="min-w-0 flex-1 break-words text-sm font-medium">{{ product.name }}</span>
+                <span class="text-sm text-stone-600">${{ product.price }}</span>
+              </RouterLink>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="order-2 ml-auto flex flex-wrap items-center justify-end gap-2 text-sm lg:order-3">
+        <template v-if="role === 'SELLER'">
+          <RouterLink to="/addProduct" active-class="bg-emerald-950 text-white hover:bg-emerald-800" class="inline-flex min-h-11 items-center rounded-full px-3 font-medium hover:bg-stone-100">Add product</RouterLink>
+          <RouterLink to="/myProducts" active-class="bg-stone-100 font-medium text-emerald-950" class="inline-flex min-h-11 items-center rounded-full px-3 hover:bg-stone-100">My products</RouterLink>
+        </template>
+        <RouterLink v-if="role === 'BUYER' || role === 'SELLER'" to="/orders" active-class="bg-stone-100 font-medium text-emerald-950" class="inline-flex min-h-11 items-center rounded-full px-3 hover:bg-stone-100">Orders</RouterLink>
+        <div v-if="role === 'SELLER' || role === 'BUYER'" class="relative" @keydown.esc="accountOpen = false; $refs.accountButton.focus()" @focusout="closeAccount">
+          <button ref="accountButton" type="button" @click="accountOpen = !accountOpen" :aria-expanded="accountOpen" aria-controls="account-actions" class="inline-flex min-h-11 items-center gap-2 rounded-full px-3 hover:bg-stone-100"><i class="pi pi-user" aria-hidden="true"></i><span class="hidden sm:inline">Account</span><span class="sr-only sm:hidden">Account</span></button>
+          <div v-if="accountOpen" id="account-actions" class="absolute right-0 z-40 mt-3 w-48 rounded-2xl border border-stone-200 bg-white p-2 shadow-xl">
+            <RouterLink to="/orders" class="flex min-h-12 items-center rounded-lg px-3 hover:bg-stone-100">My orders</RouterLink>
+            <button type="button" @click="logout()" class="min-h-12 w-full rounded-lg px-3 text-left text-red-800 hover:bg-red-50">Log out</button>
+          </div>
+        </div>
+        <template v-else>
+          <RouterLink to="/login" class="inline-flex min-h-11 items-center gap-2 rounded-full px-3 font-medium text-emerald-950 hover:bg-stone-100"><i class="pi pi-user" aria-hidden="true"></i>Sign in</RouterLink>
+          <RouterLink to="/signup" class="hidden min-h-11 items-center rounded-full border border-stone-300 px-4 font-medium text-emerald-950 hover:bg-stone-100 sm:inline-flex">Join us</RouterLink>
+        </template>
+        <RouterLink v-if="role !== 'SELLER'" :to="role === 'BUYER' ? '/cart' : '/login'" class="relative flex h-11 w-11 items-center justify-center rounded-full hover:bg-stone-100" :aria-label="'Shopping bag, ' + storeCounter.count + ' items'">
+          <i class="pi pi-shopping-bag text-xl" aria-hidden="true"></i><span v-if="storeCounter.count" class="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-orange-800 px-1 text-xs text-white">{{ storeCounter.count }}</span>
+        </RouterLink>
+      </div>
+    </nav>
+    <nav aria-label="Shop collections" class="mx-auto flex max-w-7xl items-center gap-6 overflow-x-auto px-4 pb-2 text-sm sm:gap-8 sm:px-6 lg:px-8">
+      <RouterLink v-for="category in categories" :key="category" :to="{ path: '/', query: { category }, hash: '#featured-products' }" class="inline-flex min-h-11 shrink-0 items-center border-b-2 px-1 transition-colors" :class="route.path === '/' && (route.query.category || 'All') === category ? 'border-orange-800 font-medium text-orange-800' : 'border-transparent text-stone-600 hover:border-stone-400 hover:text-stone-900'">
+        <i v-if="category === 'All'" class="pi pi-th-large mr-2 text-xs" aria-hidden="true"></i>{{ category === 'All' ? 'All finds' : category === 'Home' ? 'Home & living' : category }}
+      </RouterLink>
+    </nav>
+  </header>
+</template>
